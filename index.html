@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memperingati Hari Kartini - Emansipasi & Kebijaksanaan</title>
     
-    <!-- Mengambil Font dari Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -28,11 +27,16 @@
             color: var(--text-color);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
         }
         h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--primary-color); }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-        /* --- 2. PURE CSS AUTH OVERLAY --- */
+        /* --- 2. AUTH OVERLAY --- */
+        /* 
+           PERUBAHAN: Overlay disembunyikan via class .hidden, 
+           BUKAN hanya mengandalkan :target CSS.
+        */
         #auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -41,11 +45,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: opacity 0.4s ease;
         }
 
-        /* Trik :target - Ketika klik link #home, overlay hilang */
-        #home:target + #auth-overlay {
-            display: none;
+        /* Class ini ditambahkan oleh JavaScript setelah login */
+        #auth-overlay.hidden {
+            display: none !important;
+            pointer-events: none;
         }
 
         .auth-box {
@@ -62,7 +68,6 @@
         .auth-box h2 { margin-bottom: 10px; font-size: 2rem; }
         .auth-box p.subtitle { margin-bottom: 30px; color: #777; font-size: 0.9rem; }
 
-        /* Sembunyikan tombol Radio asli */
         .auth-radio { display: none; }
 
         .auth-tabs {
@@ -117,7 +122,6 @@
 
         .auth-btn:hover { background-color: var(--primary-color); }
 
-        /* TRIK CSS: Ganti form berdasarkan tombol radio yang dicentang */
         #tab-login:checked ~ .auth-tabs label[for="tab-login"],
         #tab-register:checked ~ .auth-tabs label[for="tab-register"] {
             color: var(--primary-color);
@@ -127,7 +131,6 @@
         #tab-login:checked ~ #login-form { display: flex; }
         #tab-register:checked ~ #register-form { display: flex; }
 
-        /* --- STIling TOMBOL SHORTCUT TAMU --- */
         .guest-link {
             display: block;
             margin-top: 20px;
@@ -152,6 +155,11 @@
             opacity: 0.1;
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+        }
+        
+        #main-batik {
+            position: fixed;
             z-index: -1;
         }
 
@@ -210,7 +218,7 @@
 
         /* --- 8. QUOTES SECTION --- */
         .quote-section { background-color: var(--primary-color); color: var(--white); width: 100%; max-width: 100%; padding: 100px 20px; text-align: center; position: relative; overflow: hidden; }
-        .quote-section::before { content: '“'; font-family: 'Playfair Display', serif; font-size: 15rem; position: absolute; top: -20px; left: 20px; opacity: 0.1; color: var(--white); }
+        .quote-section::before { content: '"'; font-family: 'Playfair Display', serif; font-size: 15rem; position: absolute; top: -20px; left: 20px; opacity: 0.1; color: var(--white); }
         .quote-text { font-size: 2rem; font-style: italic; max-width: 800px; margin: 0 auto; line-height: 1.4; }
         .quote-author { margin-top: 30px; font-family: 'Lato', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); }
 
@@ -233,83 +241,78 @@
 </head>
 <body>
 
-    <!-- HALAMAN UTAMA (Diberi id="home" untuk trik :target) -->
-    <div id="home">
-        <div class="batik-pattern"></div>
+    <div id="main-batik" class="batik-pattern"></div>
 
-        <header>
-            <div class="logo">KARTINI</div>
-            <nav>
-                <ul>
-                    <li><a href="#about">Tentang</a></li>
-                    <li><a href="#values">Semangat</a></li>
-                    <li><a href="#tribute">Persembahan</a></li>
-                </ul>
-            </nav>
-        </header>
+    <header>
+        <div class="logo">KARTINI</div>
+        <nav>
+            <ul>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#values">Semangat</a></li>
+                <li><a href="#tribute">Persembahan</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <div class="hero">
-            <h1>Habis Gelap Terbitlah Terang</h1>
-            <p>Memperingati perjuangan R.A. Kartini dalam emansipasi wanita dan pendidikan bagi seluruh bangsa.</p>
-            <a href="#about" class="btn">Jelajahi Sejarah</a>
-        </div>
-
-        <section id="about">
-            <div class="section-title">Siapa Kartini?</div>
-            <div class="about-grid">
-                <div class="about-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC4r5KOSJ73Bz1N9G9u7t9oYzyz1KGrlokug&s" alt="Ilustrasi Wanita Pembelajar">
-                </div>
-                <div class="about-text">
-                    <h2>Raden Adjeng Kartini</h2>
-                    <p>Lahir di Jepara, 21 April 1879, Kartini bukan sekadar seputri bangsawan. Ia adalah pelopor kebangkitan perempuan pribumi. Melalui surat-suratnya yang ditulis kepada teman-temannya di Eropa, ia menuangkan kegelisahan hatinya mengenai adat yang membelenggu serta keinginan kuat untuk memajukan pendidikan perempuan.</p>
-                    <p>Hari Kartini bukan hanya tentang mengenakan kebaya, melainkan tentang merefleksikan nilai-nilai keberaniannya: keberanian berpendapat, keberanian belajar, dan keberanian memajukan sesama.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="values">
-            <div class="section-title">Semangat Perjuangan</div>
-            <div class="values-container">
-                <div class="card">
-                    <span class="card-icon">✒️</span>
-                    <h3>Pendidikan</h3>
-                    <p>Kartini meyakini bahwa kunci kemajuan bangsa terletak pada pendidikan. Ia mendirikan sekolah khusus perempuan dan mendorong agar wanita diberikan hak belajar yang setara.</p>
-                </div>
-                <div class="card">
-                    <span class="card-icon">⚖️</span>
-                    <h3>Kesetaraan</h3>
-                    <p>Perjuangan emansipasi bukan untuk menyaingi laki-laki, melainkan untuk mencapai kesetaraan hak, martabat, dan kesempatan dalam berkarya.</p>
-                </div>
-                <div class="card">
-                    <span class="card-icon">🌺</span>
-                    <h3>Kebudayaan</h3>
-                    <p>Meski modern, Kartini tetap mencintai budayanya. Ia membuktikan bahwa tradisi dan kemajuan dapat berjalan beriringan secara harmonis.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="quote-section" id="tribute">
-            <div class="batik-pattern" style="opacity: 0.05;"></div>
-            <div class="quote-text">"Saya ingin menjadi orang, saya ingin mengerjakan sesuatu bagi tanah air saya, saya ingin melayani manusia..."</div>
-            <div class="quote-author">- R.A. Kartini -</div>
-        </section>
-
-        <footer>
-            <p>&copy; 2023 Peringatan Hari Kartini. Dibuat dengan <span style="color: var(--accent-color);">❤</span> untuk Indonesia.</p>
-            <p style="margin-top: 10px; opacity: 0.6;">Teruslah bermimpi, teruslah belajar.</p>
-        </footer>
+    <div id="home" class="hero">
+        <h1>Habis Gelap Terbitlah Terang</h1>
+        <p>Memperingati perjuangan R.A. Kartini dalam emansipasi wanita dan pendidikan bagi seluruh bangsa.</p>
+        <a href="#about" class="btn">Jelajahi Sejarah</a>
     </div>
-    <!-- AKHIR HALAMAN UTAMA -->
 
-    <!-- LAYAR LOGIN / BUAT AKUN -->
+    <section id="about">
+        <div class="section-title">Siapa Kartini?</div>
+        <div class="about-grid">
+            <div class="about-img">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC4r5KOSJ73Bz1N9G9u7t9oYzyz1KGrlokug&s" alt="Ilustrasi Wanita Pembelajar">
+            </div>
+            <div class="about-text">
+                <h2>Raden Adjeng Kartini</h2>
+                <p>Lahir di Jepara, 21 April 1879, Kartini bukan sekadar seputri bangsawan. Ia adalah pelopor kebangkitan perempuan pribumi. Melalui surat-suratnya yang ditulis kepada teman-temannya di Eropa, ia menuangkan kegelisahan hatinya mengenai adat yang membelenggu serta keinginan kuat untuk memajukan pendidikan perempuan.</p>
+                <p>Hari Kartini bukan hanya tentang mengenakan kebaya, melainkan tentang merefleksikan nilai-nilai keberaniannya: keberanian berpendapat, keberanian belajar, dan keberanian memajukan sesama.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="values">
+        <div class="section-title">Semangat Perjuangan</div>
+        <div class="values-container">
+            <div class="card">
+                <span class="card-icon">✒️</span>
+                <h3>Pendidikan</h3>
+                <p>Kartini meyakini bahwa kunci kemajuan bangsa terletak pada pendidikan. Ia mendirikan sekolah khusus perempuan dan mendorong agar wanita diberikan hak belajar yang setara.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">⚖️</span>
+                <h3>Kesetaraan</h3>
+                <p>Perjuangan emansipasi bukan untuk menyaingi laki-laki, melainkan untuk mencapai kesetaraan hak, martabat, dan kesempatan dalam berkarya.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🌺</span>
+                <h3>Kebudayaan</h3>
+                <p>Meski modern, Kartini tetap mencintai budayanya. Ia membuktikan bahwa tradisi dan kemajuan dapat berjalan beriringan secara harmonis.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section" id="tribute">
+        <div class="batik-pattern" style="opacity: 0.05;"></div>
+        <div class="quote-text">"Saya ingin menjadi orang, saya ingin mengerjakan sesuatu bagi tanah air saya, saya ingin melayani manusia..."</div>
+        <div class="quote-author">- R.A. Kartini -</div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Peringatan Hari Kartini. Dibuat dengan <span style="color: var(--accent-color);">❤</span> untuk Indonesia.</p>
+        <p style="margin-top: 10px; opacity: 0.6;">Teruslah bermimpi, teruslah belajar.</p>
+    </footer>
+
+    <!-- OVERLAY LOGIN -->
     <div id="auth-overlay">
         <div class="batik-pattern"></div>
         <div class="auth-box">
             <h2>KARTINI</h2>
             <p class="subtitle">Silakan masuk atau buat akun untuk melanjutkan</p>
             
-            <!-- Tombol Radio Tersembunyi untuk mengganti Tab -->
             <input type="radio" name="auth-tab" id="tab-login" class="auth-radio" checked>
             <input type="radio" name="auth-tab" id="tab-register" class="auth-radio">
 
@@ -322,19 +325,48 @@
             <div id="login-form" class="auth-form">
                 <input type="text" placeholder="Username">
                 <input type="password" placeholder="Password">
-                <a href="#home" class="auth-btn">Masuk</a>
-                <!-- TOMBOL SHORTCUT TAMU -->
-                <a href="#home" class="guest-link">Masuk langsung sebagai Tamu ➔</a>
+                <!-- PERUBAHAN: tombol ini TIDAK lagi <a href>, tapi <button> -->
+                <button class="auth-btn" onclick="dismissOverlay()">Masuk</button>
+                <button class="guest-link" onclick="dismissOverlay()">Masuk langsung sebagai Tamu ➔</button>
             </div>
 
             <!-- Form Buat Akun -->
             <div id="register-form" class="auth-form">
                 <input type="text" placeholder="Buat Username">
                 <input type="password" placeholder="Buat Password">
-                <label for="tab-login" class="auth-btn">Daftar</label>
+                <button class="auth-btn" onclick="dismissOverlay()">Daftar</button>
             </div>
         </div>
     </div>
+
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT PENGAMAN: pastikan overlay HILANG -->
+    <!-- ============================================ -->
+    <script>
+        function dismissOverlay() {
+            const overlay = document.getElementById('auth-overlay');
+            overlay.classList.add('hidden');
+            // Scroll ke atas (hero) setelah overlay hilang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Jika user sudah pernah menghilangkan overlay di sesi ini,
+        // dan kemudian menekan tombol "Back" browser, 
+        // cegah overlay muncul kembali.
+        window.addEventListener('pageshow', function(event) {
+            const overlay = document.getElementById('auth-overlay');
+            if (sessionStorage.getItem('overlayDismissed') === 'true') {
+                overlay.classList.add('hidden');
+            }
+        });
+
+        // Simpan status bahwa overlay sudah pernah dismiss
+        const originalDismiss = dismissOverlay;
+        dismissOverlay = function() {
+            originalDismiss();
+            sessionStorage.setItem('overlayDismissed', 'true');
+        };
+    </script>
 
 </body>
 </html>
